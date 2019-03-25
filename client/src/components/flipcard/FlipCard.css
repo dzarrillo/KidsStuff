@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+  font-family: "montserrat";
+}
+body {
+  /* background: #333; */
+}
+.middle {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  
+  transform: translate(-50%, -50%);
+}
+
+/* multiple answer buttons */
+.roundbutton {
+  border-radius: 50%;
+  background-color: gold;
+  /* background-image: linear-gradient(yellow, red); */
+}
+
+.roundbutton:hover {
+  transition: 1s ease-in-out;
+ background-color: salmon;
+}
+
+.card {
+  width: 450px;
+  height: 450px;
+  /* border: 2px solid black; */
+  /* box-shadow: 10px 10px 2px lightgrey; */
+}
+
+.cardtitle {
+  margin: 20px 20px;
+}
+.riddle {
+  margin: 20px 20px;
+  /* text-align: left; */
+  font-size: 1.8rem;
+}
+.addition {
+  margin-bottom: 20px;
+}
+
+.multiplechoice {
+  margin: 5px 5px 30px 5px;
+  /* background: chartreuse; */
+}
+
+button {
+  margin: 0 10px;
+  /* width: 20%; */
+  height: 75px;
+  width: 75px;
+  font-size: 1.5rem;
+}
+
+/* Trainsition */
+.front,
+.back {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  position: absolute;
+  /* transition: transform 0.6s linear; */
+  transition: transform 1s ease-in-out;
+}
+.front {
+  transform: perspective(600px) rotateY(0deg);
+  border: 2px solid black;
+  box-shadow: 0 0 15px rgba(0, 0, 0, .20);
+}
+/* Background image in front card */
+#flipcardFront .bgimage {
+  position: absolute;
+  background: url("../../assets/images/balloons.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  z-index: -1;
+}
+.back {
+  background: #f1f1f1;
+  transform: perspective(600px) rotateY(180deg);
+}
+
+.backcontent {
+  padding-top: 100px;
+  color: #2c3e50;
+  text-align: center;
+  width: 100%;
+}
+
+/* .card:hover > .front {
+  transform: perspective(600px) rotateY(-180deg);
+}
+.card:hover > .back {
+  transform: perspective(600px) rotateY(0deg);
+} */
+.flipfront {
+  
+  transform: perspective(600px) rotateY(-180deg);
+}
+.flipback {
+  transform: perspective(600px) rotateY(0deg);
+}
+
+.backtitle {
+  padding: 50px 0;
+  font-size: 50px;
+}
+.card-img-back {
+  /* background-image: url("https://media.giphy.com/media/f6ja5Kkao2rTi/giphy.gif"); */
+  background-image: url("../../assets/images/yellowbackground.jpg");
+  height: 100%;
+  opacity: 20%;
+  z-index: -1;
+  /* https://media.giphy.com/media/76w78AfpHtDB6/giphy.gif */
+}
+.back-content {
+  font-size: 30px;
+  
+  color: #444;
+  padding-bottom: 50px;
+}
