@@ -1,4 +1,4 @@
-* {
+.container {
   margin: 0;
   padding: 0;
   text-decoration: none;
@@ -8,15 +8,36 @@ body {
   /* background: #333; */
 }
 .middle {
-  position: absolute;
+  /* position: absolute; */
+  position: relative;
   top: 40%;
   left: 50%;
   
   transform: translate(-50%, -50%);
 }
 
+.ovalbutton {
+  margin: 0 10px;
+  height: 60px;
+  width: 160px;
+  padding: 4px;
+  font-size: 1.3rem;
+  border-radius: 30%;
+  background-color: lightgreen;
+}
+.ovalbutton:hover {
+ transition: 1s ease-in-out;
+ background-color: darkgreen;
+ color: wheat;
+}
+
 /* multiple answer buttons */
 .roundbutton {
+  margin: 0 10px;
+  /* width: 20%; */
+  height: 75px;
+  width: 75px;
+  font-size: 1.5rem;
   border-radius: 50%;
   background-color: gold;
   /* background-image: linear-gradient(yellow, red); */
@@ -49,14 +70,6 @@ body {
 .multiplechoice {
   margin: 5px 5px 30px 5px;
   /* background: chartreuse; */
-}
-
-button {
-  margin: 0 10px;
-  /* width: 20%; */
-  height: 75px;
-  width: 75px;
-  font-size: 1.5rem;
 }
 
 /* Trainsition */

@@ -12,24 +12,22 @@ class FlipCard extends Component {
     riddles: [],
     flipFront: false,
     flipBack: false,
-    riddleCount: 0
+    riddleCount: 0,
+    operation: this.props.operation
   };
 
-  //   Populate the math question
   componentWillMount() {
     // Create question
     // this.getQuestion();
   }
 
   componentDidMount() {
-     // Create question
-    //  this.getQuestion();
     // Get the riddles from mongo database
     API.getRiddles()
       .then(res => {
         let tempriddles = [...res.data];
         tempriddles.slice(this.shuffleArray(tempriddles));
-        
+
         this.setState({ riddles: [...tempriddles] });
       })
       .catch(error => {
@@ -40,7 +38,7 @@ class FlipCard extends Component {
     this.populateAnswer();
   }
 
-  //   This populates the multiple choice answer
+  //   This populates the math question and multiple choice answer
   populateAnswer = () => {
     let ansArr = [];
     let answer = 0;
@@ -48,10 +46,29 @@ class FlipCard extends Component {
     let num1 = this.getRandomNumber();
     let num2 = this.getRandomNumber();
 
-    this.setState({ numOne: num1 });
-    this.setState({ numTwo: num2 });
+    if (num1 > num2) {
+      this.setState({ numOne: num1 });
+      this.setState({ numTwo: num2 });
+    } else {
+      this.setState({ numOne: num2 });
+      this.setState({ numTwo: num1 });
+    }
 
-    ansArr.push(num1 + num2);
+    if (this.state.operation === "ADD") {
+      this.setState({ answer: num1 + num2 });
+      ansArr.push(num1 + num2);
+    } else if (this.state.operation === "SUB") {
+      let tot = 0;
+      if (num1 > num2) {
+        tot = num1 - num2;
+        ansArr.push(tot);
+      } else {
+        tot = num2 - num1;
+        ansArr.push(tot);
+      }
+      this.setState({ answer: tot });
+    }
+
     while (counter <= 2) {
       answer = this.getRandomNumber();
       if (!ansArr.includes(answer)) {
@@ -59,57 +76,55 @@ class FlipCard extends Component {
         counter += 1;
       }
     }
-    
-    ansArr.map( num => {
-      console.log("Before shuffle" + num);
-    })
+
     ansArr.slice(this.shuffleArray(ansArr));
-    // ansArr = [...this.shuffleArray(ansArr)];
 
     this.setState({ answers: ansArr.slice() });
-    // this.setState({answers: [...ansArr]});
-
-    this.setState({ answer: num1 + num2 });
   };
 
-  getQuestion = () => {
-    this.setState({ numOne: this.getRandomNumber() });
-    this.setState({ numTwo: this.getRandomNumber() });
-  };
+  // getQuestion = () => {
+  //   let number1 = this.getRandomNumber();
+  //   let number2 = this.getRandomNumber();
+  //   if (number1 > number2) {
+  //     this.setState({ numOne: number1 });
+  //     this.setState({ numTwo: number2 });
+  //   } else {
+  //     this.setState({ numOne: number2 });
+  //     this.setState({ numTwo: number1 });
+  //   }
+  // };
 
   getRandomNumber = () => {
     let num = Math.floor(Math.random() * 10 + 1);
-    // console.log(num);
     return num;
   };
 
   handleButtonClick = e => {
-    // alert("button clicked: " + e.target.name);
     if (e.target.value == this.state.answer) {
-      // alert("Awsome!!!!!!");
       this.setState({ flipFront: true });
       this.setState({ flipBack: true });
     } else {
-      alert("Wrong answer.....");
+      // alert("Wrong answer.....");
     }
   };
 
   handleButtonOk = e => {
     this.setState({ flipFront: false });
     this.setState({ flipBack: false });
-    
-    if(this.state.riddleCount < (this.state.riddles.length - 1) ){
+  };
+
+  // Get next riddle and math question
+  handleButtonNext = e => {
+    if (this.state.riddleCount < this.state.riddles.length - 1) {
       let num = this.state.riddleCount + 1;
-      this.setState({riddleCount: num});
+      this.setState({ riddleCount: num });
     } else {
-      this.setState({riddleCount: 0}); 
+      this.setState({ riddleCount: 0 });
     }
 
-   
-    // this.getQuestion();
-    // this.populateAnswer();
     this.populateAnswer();
   };
+
   // Shuffle the array
   shuffleArray = arr => {
     for (let i = arr.length - 1; i > 1; i--) {
@@ -122,25 +137,34 @@ class FlipCard extends Component {
   render() {
     return (
       <div className="card middle">
-        {/* <div id="flipcardFront" className="front"> */}
         <div
           id="flipcardFront"
           className={"front " + (this.state.flipFront ? "flipfront " : "")}
         >
           <div className="bgimage" />
           <div className="">
-            <h2 className="cardtitle">Answer the math question to get the answer to the riddle</h2>
-           
+            <h2 className="cardtitle">
+              Answer the math question to get the answer to the riddle
+            </h2>
+
             {this.state.riddles.length ? (
-              <p className="riddle">{this.state.riddles[this.state.riddleCount].Field_1}</p>
+              <p className="riddle">
+                {this.state.riddles[this.state.riddleCount].Field_1}
+              </p>
             ) : (
               <p className="riddle">No data to display</p>
             )}
           </div>
           <div className="addition">
-            <h1>
-              {this.state.numOne} + {this.state.numTwo} = ?
-            </h1>
+            {this.state.operation === "ADD" ? (
+              <h1>
+                {this.state.numOne} + {this.state.numTwo} = ?
+              </h1>
+            ) : (
+              <h1>
+                {this.state.numOne} - {this.state.numTwo} = ?
+              </h1>
+            )}
           </div>
           <div className="multiplechoice">
             <button
@@ -162,7 +186,7 @@ class FlipCard extends Component {
               {this.state.answers[1]}
             </button>
             <button
-               className="roundbutton"
+              className="roundbutton"
               type="button"
               name="btnThree"
               value={this.state.answers[2]}
@@ -171,7 +195,7 @@ class FlipCard extends Component {
               {this.state.answers[2]}
             </button>
             <button
-             className="roundbutton"
+              className="roundbutton"
               type="button"
               name="btnFour"
               value={this.state.answers[3]}
@@ -180,19 +204,32 @@ class FlipCard extends Component {
               {this.state.answers[3]}
             </button>
           </div>
+
+          <button
+            className="ovalbutton"
+            type="button"
+            name="btnNext"
+            onClick={this.handleButtonNext}
+          >
+            Next Question
+          </button>
         </div>
-        {/* <div className="back"> */}
         <div className={"back " + (this.state.flipBack ? "flipback " : "")}>
           <div className="backcontent card-img-back">
-            {/* <h6 className="backtitle" >Answer to Riddle</h6> */}
             {this.state.riddles.length ? (
-              <p className="back-content">{this.state.riddles[this.state.riddleCount].Field_2}</p>
-              // <p>{this.state.riddles[0].Field_2}</p>
+              <p className="back-content">
+                {this.state.riddles[this.state.riddleCount].Field_2}
+              </p>
             ) : (
               <p className="back-content">No data to display</p>
             )}
-            <button className="roundbutton" type="button" name="btnOk" onClick={this.handleButtonOk}>
-              OK
+            <button
+              className="ovalbutton"
+              type="button"
+              name="btnOk"
+              onClick={this.handleButtonOk}
+            >
+              Go Back
             </button>
           </div>
         </div>

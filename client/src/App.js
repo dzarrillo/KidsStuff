@@ -11,8 +11,15 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <FlipTest></FlipTest> */}
-        <FlipCard></FlipCard>
+        <main className="main">
+          <section>
+            <FlipCard operation={"ADD"}></FlipCard>
+          </section>
+          <section>
+            <FlipCard operation={"SUB"}></FlipCard>
+          </section>
+        </main>
+                
       </div>
     );
   }
